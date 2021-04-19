@@ -26,9 +26,6 @@ func Test_structRef(t *testing.T) {
 			t.Error("Output should not empty")
 		}
 	})
-	t.Run("explicit tag", func(t *testing.T) {
-
-	})
 }
 
 type TestStruct struct {
