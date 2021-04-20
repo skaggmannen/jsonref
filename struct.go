@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func Struct(s interface{}, optFuns ...OptFunc) JsonRef {
+func Struct(s interface{}, structOpts ...StructOpt) JsonRef {
 	t := reflect.TypeOf(s)
 
 	if t.Kind() != reflect.Struct {
@@ -15,24 +15,39 @@ func Struct(s interface{}, optFuns ...OptFunc) JsonRef {
 	}
 
 	opts := Opts{}
-	for _, o := range optFuns {
-		o(&opts)
+	for _, o := range structOpts {
+		o.Apply(&opts)
 	}
 
 	return structRef{Opts: opts, t: t, v: reflect.ValueOf(s)}
 }
 
-type OptFunc func(o *Opts)
+type StructOpt interface {
+	Apply(opts *Opts)
+}
 
-func HrefSep(s string) OptFunc {
+type StructOptFunc func(o *Opts)
+
+func (o StructOptFunc) Apply(opts *Opts) {
+	o(opts)
+}
+
+func HrefSep(s string) StructOptFunc {
 	return func(o *Opts) {
 		o.HrefSep = s
 	}
 }
-func Ignore(paths ...string) OptFunc {
+
+func Ignore(paths ...string) StructOptFunc {
 	return func(o *Opts) {
 		o.Ignore = append(o.Ignore, paths...)
 	}
+}
+
+type Lookup map[string][]string
+
+func (l Lookup) Apply(o *Opts) {
+	o.Lookup = l
 }
 
 type structRef struct {
@@ -130,6 +145,10 @@ func (r structFieldRef) format() string {
 
 func (r structFieldRef) oneOf() []string {
 	if oneOf, ok := r.t.Tag.Lookup("oneOf"); ok {
+		if values, found := r.Lookup[oneOf]; found {
+			return values
+		}
+
 		return strings.Split(oneOf, ",")
 	}
 

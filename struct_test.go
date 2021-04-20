@@ -19,6 +19,9 @@ func Test_structRef(t *testing.T) {
 			},
 			jsonref.HrefSep("-"),
 			jsonref.Ignore("d.m.a"),
+			jsonref.Lookup{
+				"allowedValues": []string{"Foo", "Bar", "Baz"},
+			},
 		)
 
 		_, _ = ref.WriteTo(&buf)
@@ -34,7 +37,7 @@ func Test_structRef(t *testing.T) {
 
 type TestStruct struct {
 	A string      `json:"a"`
-	B string      `json:"b"`
+	B string      `json:"b" oneOf:"allowedValues"`
 	C string      `json:"-"`
 	D interface{} `json:"d" format:"shouldNotBeDisplayed"`
 	E string      `json:"e" format:"UUID"`

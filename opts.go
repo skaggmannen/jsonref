@@ -13,6 +13,7 @@ type Opts struct {
 	Parents     []string
 	HrefSep     string
 	Ignore      []string
+	Lookup      Lookup
 
 	Fmt FmtOpts
 }
