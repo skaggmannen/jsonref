@@ -12,6 +12,7 @@ type Opts struct {
 	IndentLevel int
 	Parents     []string
 	HrefSep     string
+	Ignore      []string
 
 	Fmt FmtOpts
 }
@@ -62,4 +63,16 @@ func (o Opts) fieldValue(v string) string {
 	}
 
 	return `<span class="jsonref-value">` + v + `</span>`
+}
+
+func (o Opts) ignored() bool {
+	path := strings.ToLower(strings.Join(o.Parents, "."))
+
+	for _, ignored := range o.Ignore {
+		if path == strings.ToLower(ignored) {
+			return true
+		}
+	}
+
+	return false
 }

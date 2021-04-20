@@ -29,6 +29,11 @@ func HrefSep(s string) OptFunc {
 		o.HrefSep = s
 	}
 }
+func Ignore(paths ...string) OptFunc {
+	return func(o *Opts) {
+		o.Ignore = append(o.Ignore, paths...)
+	}
+}
 
 type structRef struct {
 	Opts
@@ -76,6 +81,10 @@ func (r structFieldRef) WriteTo(w io.Writer) (int64, error) {
 	opts.OneOf = r.oneOf()
 	opts.Parents = append(opts.Parents, name)
 	opts.IndentLevel += 1
+
+	if opts.ignored() {
+		return 0, nil
+	}
 
 	var buf bytes.Buffer
 	buf.WriteString(opts.indent() + opts.fieldName(name))

@@ -12,10 +12,14 @@ func Test_structRef(t *testing.T) {
 	t.Run("example struct", func(t *testing.T) {
 		var buf bytes.Buffer
 
-		ref := jsonref.Struct(TestStruct{
-			A: "example-value",
-			D: TestStruct{},
-		}, jsonref.HrefSep("-"))
+		ref := jsonref.Struct(
+			TestStruct{
+				A: "example-value",
+				D: TestStruct{},
+			},
+			jsonref.HrefSep("-"),
+			jsonref.Ignore("d.m.a"),
+		)
 
 		_, _ = ref.WriteTo(&buf)
 
