@@ -44,9 +44,9 @@ type TestStruct struct {
 	F string      `json:"f" oneOf:"A,B,C,D"`
 	G [][]byte    `json:"g" format:"Base64"`
 	H int8        `json:"h"`
-	I uint8       `json:"i" format:"Hour"`
-	J uint8       `json:"j" format:"Minute"`
-	K uint8       `json:"k" format:"Second"`
+	I *uint8      `json:"i" format:"Hour"`
+	J *uint8      `json:"j" format:"Minute"`
+	K *uint8      `json:"k" format:"Second"`
 	L float64     `json:"l"`
 	M []struct {
 		A bool `json:"a"`

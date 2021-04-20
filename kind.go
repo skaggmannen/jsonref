@@ -39,6 +39,12 @@ func (r kindRef) WriteTo(w io.Writer) (int64, error) {
 			t:    r.t,
 			v:    r.v,
 		}.WriteTo(w)
+	case reflect.Ptr:
+		return ptrRef{
+			Opts: r.Opts,
+			t:    r.t,
+			v:    r.v,
+		}.WriteTo(w)
 	default:
 		t := r.v.Kind().String()
 
