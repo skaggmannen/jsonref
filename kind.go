@@ -29,7 +29,7 @@ func (r kindRef) WriteTo(w io.Writer) (int64, error) {
 		}.WriteTo(w)
 	case reflect.Array, reflect.Slice:
 		return listRef{
-			opts: r.Opts,
+			Opts: r.Opts,
 			t:    r.t,
 			v:    r.v,
 		}.WriteTo(w)

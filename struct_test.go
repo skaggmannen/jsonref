@@ -17,7 +17,7 @@ func Test_structRef(t *testing.T) {
 			D: TestStruct{},
 		}, jsonref.HrefSep("-"))
 
-		ref.WriteTo(&buf)
+		_, _ = ref.WriteTo(&buf)
 
 		s := buf.String()
 		log.Printf(s)
@@ -35,7 +35,7 @@ type TestStruct struct {
 	D interface{} `json:"d" format:"shouldNotBeDisplayed"`
 	E string      `json:"e" format:"UUID"`
 	F string      `json:"f" oneOf:"A,B,C,D"`
-	G []string    `json:"g" format:"Base64"`
+	G [][]byte    `json:"g" format:"Base64"`
 	H int8        `json:"h"`
 	I uint8       `json:"i" format:"Hour"`
 	J uint8       `json:"j" format:"Minute"`
@@ -44,4 +44,5 @@ type TestStruct struct {
 	M []struct {
 		A bool `json:"a"`
 	} `json:"m"`
+	N []byte `json:"n"`
 }

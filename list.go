@@ -4,21 +4,26 @@ import (
 	"bytes"
 	"io"
 	"reflect"
+	"strings"
 )
 
 type listRef struct {
-	opts Opts
-	t    reflect.Type
-	v    reflect.Value
+	Opts
+	t reflect.Type
+	v reflect.Value
 }
 
 func (r listRef) WriteTo(w io.Writer) (int64, error) {
-	var v reflect.Value
-	if r.v.Len() > 0 {
-		v = r.v.Field(0)
+	if r.t.Elem().Kind() == reflect.Uint8 {
+		return io.Copy(w, strings.NewReader(r.fieldType("Base64")))
 	}
 
-	opts := r.opts
+	var v reflect.Value
+	if v.IsValid() && r.v.Len() > 0 {
+		v = r.v.Index(0)
+	}
+
+	opts := r.Opts
 
 	var buf bytes.Buffer
 	buf.WriteString("[ ")
