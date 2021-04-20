@@ -78,7 +78,7 @@ func (r structFieldRef) WriteTo(w io.Writer) (int64, error) {
 	opts.IndentLevel += 1
 
 	var buf bytes.Buffer
-	buf.WriteString(opts.indent() + r.fieldName(name))
+	buf.WriteString(opts.indent() + opts.fieldName(name))
 
 	_, _ = kindRef{
 		Opts: opts,
